@@ -1,2 +1,2 @@
 # Portfolio
-Repository with programs that I'm pround of. These are the programs that I find worth of showing to the world
+I just felt pround of myself after making them work

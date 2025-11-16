@@ -37,7 +37,7 @@ def action_on_list(action, lista):                          # Actions on list
                 show_list=1
             return
         case 1:
-            description=input("Name your new task(33 characters max): ")
+            description=input("Name your new task(50 characters max): ")
             confirmation=input(f"Adding: {description}. Is this correct? (y/n) ")
             if confirmation.lower()=='y':
                 lista.append({'status':'X','task':description})

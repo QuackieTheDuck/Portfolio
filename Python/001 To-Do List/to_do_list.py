@@ -5,7 +5,7 @@
 # now to the next project
 
 
-# need to add checking if lista exist otherwise the program crashes
+# the project was made with assumption that user will not try to raise up any errors 
 
 import os
 import json
@@ -87,14 +87,16 @@ def loading_list():                                 # Loading list completed
 def file_checking(lista):
     if os.path.isfile("list.json"):
         lista=loading_list()
+        return lista
     else:
         with open("list.json","w") as l:
             json_list={"tasks":[]}
             l.write(json.JSONEncoder().encode(json_list))
         lista=loading_list()
+        return lista 
 
 lista=[]
-file_checking(lista)
+lista=file_checking(lista)
 show_list=1
 os.system('title To-Do List')
 while True:

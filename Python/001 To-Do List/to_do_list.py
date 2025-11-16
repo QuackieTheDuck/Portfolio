@@ -29,14 +29,14 @@ def menu():                                             # Displays menu and
 
 def action_on_list(action, lista):                          # Actions on list
     match action:
-        case 0:
+        case 0:                                                             # case 0 ready and tested
             global show_list
             if show_list:
                 show_list=0
             else:
                 show_list=1
             return
-        case 1:
+        case 1:                                                                 # Case 1 ready and tested
             description=input("Name your new task(50 characters max): ")
             confirmation=input(f"Adding: {description}. Is this correct? (y/n) ")
             if confirmation.lower()=='y':
@@ -44,12 +44,12 @@ def action_on_list(action, lista):                          # Actions on list
             else:
                 return
         case 2:
-            completed=int(input("Which task would you like to mark as done? "))       # Case 2 gotowy
-            confirmation=input("Are you sure? (y/n) ")                                  # wszystko dziala prawidlowo
+            completed=int(input("Which task would you like to mark as done? "))       # Case 2 ready and tested
+            confirmation=input("Are you sure? (y/n) ")                                
             if confirmation.lower() == "y":
                 tmp=lista[completed-1]
                 tmp['status']=chr(0x0001F5F8)
-        case 3:                                                                 # Case 3 gotowy
+        case 3:                                                                 # Case 3 ready and tested
             removed=int(input("Which task would you like to remove? "))         # wszystko dziala poprawnie
             confirmation=input("Are you sure? (y/n) ")
             if confirmation.lower() == "y":
@@ -57,20 +57,22 @@ def action_on_list(action, lista):                          # Actions on list
             else:
                 return
         case 4:
-            uncompleted=int(input("Which task would you like to mark as undone? "))     # Case 2 gotowy
-            confirmation=input("Are you sure? (y/n) ")                                  # wszystko dziala prawidlowo
+            uncompleted=int(input("Which task would you like to mark as undone? "))     # Case 2 ready and tested
+            confirmation=input("Are you sure? (y/n) ")                                  
             if confirmation.lower() == "y":
                 tmp=lista[uncompleted-1]
                 tmp['status']="X"
             else:
                 return
-        case 5:                                             # Case 4 gotowy
-            confirmation=input("Are you sure? (y/n) ")      # wszystko dziala poprawnie
+        case 5:                                             # Case 4 ready and tested
+            confirmation=input("Are you sure? (y/n) ")     
             if confirmation.lower() == "y":
                 saving_list(lista)
                 exit()
             else:
                 return
+        case _:
+            pass
 
 def saving_list(lista):
     with open("list.json","w") as l:
@@ -83,7 +85,7 @@ def loading_list():                                 # Loading list completed
     return(lista['tasks'])
 
 def file_checking(lista):
-    if os.path.isfile("lista.json"):
+    if os.path.isfile("list.json"):
         lista=loading_list()
     else:
         with open("list.json","w") as l:

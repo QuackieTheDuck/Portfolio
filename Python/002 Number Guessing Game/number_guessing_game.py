@@ -8,6 +8,8 @@
 
 # different approach. first cli based version then converting to gui with tkinter and then adding functionalities.
 
+# dont work properly right now but i'm still working on backend. frontend is almost ready
+
 import random
 import tkinter as tk
 import csv
@@ -28,97 +30,66 @@ class NumberGuessingGame:
     def __init__(self, window):
         self.window=window
         self.window.title("Number Guessing Game")
-        self.window.rowconfigure(0, weight=1)
-        self.window.columnconfigure(0, weight=1)
-        self.window.columnconfigure(1, weight=1)
         self.solution=random_number()
         self.num_of_tr=1
         self.score=0
         self.numbers=[1]*100
+        self.guess=0
 
         # Rules display
         Rules_text="You Have to guess number(1-100).\nWith every try points are being divided by 2.\n Lowest possible score is 5.\n Score is saved on the board.\nGood luck!"
-        self.rules_label=tk.Label(window,text=Rules_text,width=100)
-        self.rules_label.grid(row=0,column=0,columnspan=2)
+        self.rules_label=tk.Label(window,text=Rules_text)
+        self.rules_label.grid(column=0,row=0,columnspan=2)
 
         # Tiles helping with playing
         self.tiles_frame=tk.LabelFrame(window,text="Numbers", padx=10, pady=10)
-        self.tiles_frame.grid(row=1,column=0)
-        self.create_tiles(self.numbers)
+        self.tiles_frame.grid(column=0,row=1)
+        self.create_tiles()
 
         # Creating a guessing field with score information
-        self.guess_field=tk.LabelFrame(window,text="guessing field",padx=10,pady=10)
-        self.guess_field.grid(row=1,column=1)
+        self.guess_frame=tk.LabelFrame(window,text="Guess", padx=10, pady=10)
+        self.guess_frame.grid(column=1,row=1)
+        self.enter_guess()
 
-
-
-    def create_tiles(self,numbers):
+        # Checking if solution==guess
+        self.update_tiles()
+        #self.create_tiles()
+    def create_tiles(self):
         for i in range(10):
             for j in range(10):
                 num=(i*10+j+1)
-                color="lightgreen" if numbers[(i*10+j)] else "red"
+                color="lightgreen" if self.numbers[(i*10+j)] else "red"
                 self.tiles = tk.Label(self.tiles_frame,text=f"{num}",width=3,height=2,bg=f"{color}",fg="black")
                 self.tiles.grid(row=i,column=j)
-#    def update_tiles():
-#    def chceck_guess():
-#    def reset_game():
+
+    def update_tiles(self):
+        if self.solution<int(self.guess):            # if lower 
+            self.num_of_tr+=1
+            for i in range (self.guess,100):
+                self.numbers[i]=0
+            self.create_tiles()
+        elif int(self.guess)<self.solution:           # if more
+            self.num_of_tr+=1
+            for i in range (0,self.guess):
+                self.numbers[i]=0
+            self.create_tiles()
+        elif int(self.guess)==self.solution:            # equal
+            self.num_of_tr=1
+            score=points_count(num_of_tr)
+
+    
+    def enter_guess(self):
+        self.content=tk.Frame(self.guess_frame,pady=10,padx=10)
+        self.guess_entry=tk.Entry(self.content,width=30)
+        self.guess_entry.grid(row=0,column=0)
+        self.points=tk.Label(self.content, text=f"You can get {points_count(self.num_of_tr)} for correct answer.")
+        self.button=tk.Button(self.content,text="Submit.")
+        self.button.grid(column=0,row=1)
+        self.points.grid(row=2,column=0)
+        self.content.grid(column=0,row=0)
+
+#    def save_game():
 
 window = tk.Tk()
 game = NumberGuessingGame(window)
 window.mainloop()
-'''
-def game(solution):
-    num_of_tr=1
-    points=points_count(num_of_tr)
-    score=0
-    while True:                                     # guessing the number
-        points=points_count(num_of_tr)
-        answer=int(input(f"Guess the number({points} pts.): "))
-        if answer>solution:
-            print("Less.")
-        elif answer<solution:
-            print("More.")
-        elif answer==solution:
-            score=points
-            return("Correct")
-        num_of_tr+=1
-
-# Done: 
-
-
-# Not Done:
-def tiles_shown(numbers):
-    for i in range(10):
-        for j in range(10):
-            frame=tk.Frame(master=window,relief=tk.RAISED)
-            frame.grid(row=i,column=j)
-            tmp_num=(i+1)*(j+1)
-            tmp_color="green"
-            if numbers[(i+1)*(j+1)-1]:
-                tmp_color="green"
-            else:
-                tmp_color="red"
-            label = tk.Label(master=frame, text=f"{tmp_num}",width=5,height=3,bg=f"{tmp_color}",fg="black")
-            label.pack()
-            
-            
-#def saving_score():
-#def loading_score():
-def display_rules():
-    return("Rules:\n You Have to guess the random number.\n With every try points are being divided by 2.\n Lowest possible score is 5.\n Score is saved on the board.\nGood luck!")
-
-# Skeleton of game:  
-window=tk.Tk()
-window.title("Number Guessing Game") # changes window name
-
-numbers=[1]*100
-solution=random_number()
-
-rules=tk.Label(text=display_rules())
-rules.pack()
-tiles_shown(numbers)
-# Just trying out
-
-game(solution)
-window.mainloop()
-'''

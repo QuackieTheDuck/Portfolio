@@ -1,15 +1,3 @@
-# Classical number guessing game
-# the aim is to make gui interface for this game
-# I want all numbers 1-100 to be shown
-# add a field to enter number
-# I want numbers to show which can and which cannot be right answers
-# Add a leaderboard with points in toon maybe(?)
-# two buttons one to enter number and one to show scores
-
-# different approach. first cli based version then converting to gui with tkinter and then adding functionalities.
-
-# dont work properly right now but i'm still working on backend. frontend is almost ready
-
 import random
 import tkinter as tk
 import csv
@@ -32,6 +20,7 @@ class NumberGuessingGame:
         self.window.title("Number Guessing Game")
         self.solution=random_number()
         self.num_of_tr=1
+        self.points=points_count(self.num_of_tr)
         self.score=0
         self.numbers=[1]*100
         self.guess=0
@@ -49,7 +38,20 @@ class NumberGuessingGame:
         # Creating a guessing field with score information
         self.guess_frame=tk.LabelFrame(window,text="Guess", padx=10, pady=10)
         self.guess_frame.grid(column=1,row=1)
-        self.enter_guess()
+        # Entry Frame
+        self.content=tk.Frame(self.guess_frame,pady=10,padx=10)
+        # Entry
+        self.guess_entry=tk.Entry(self.content,width=30)
+        self.guess_entry.grid(row=1,column=0)
+        self.guess_entry.bind('<Return>', lambda e:self.update_tiles())
+        # Button
+        self.button=tk.Button(self.content,text="Submit.",command=self.update_tiles)
+        self.feedback_label=tk.Label(self.content,text="Please, enter a number", pady=10,padx=10)
+        self.points_label=tk.Label(self.content, text=f"You can get {self.points} for correct answer.")
+        self.feedback_label.grid(column=0,row=0)
+        self.content.grid(column=0,row=2)
+        self.button.grid(column=0,row=3)
+        self.points_label.grid(row=4,column=0)
 
         # Checking if solution==guess
         self.update_tiles()
@@ -63,30 +65,33 @@ class NumberGuessingGame:
                 self.tiles.grid(row=i,column=j)
 
     def update_tiles(self):
-        if self.solution<int(self.guess):            # if lower 
+        try:
+            self.guess=int(self.guess_entry.get())
             self.num_of_tr+=1
-            for i in range (self.guess,100):
-                self.numbers[i]=0
-            self.create_tiles()
-        elif int(self.guess)<self.solution:           # if more
-            self.num_of_tr+=1
-            for i in range (0,self.guess):
-                self.numbers[i]=0
-            self.create_tiles()
-        elif int(self.guess)==self.solution:            # equal
-            self.num_of_tr=1
-            score=points_count(num_of_tr)
-
-    
-    def enter_guess(self):
-        self.content=tk.Frame(self.guess_frame,pady=10,padx=10)
-        self.guess_entry=tk.Entry(self.content,width=30)
-        self.guess_entry.grid(row=0,column=0)
-        self.points=tk.Label(self.content, text=f"You can get {points_count(self.num_of_tr)} for correct answer.")
-        self.button=tk.Button(self.content,text="Submit.")
-        self.button.grid(column=0,row=1)
-        self.points.grid(row=2,column=0)
-        self.content.grid(column=0,row=0)
+            # Check if number is correct
+            if self.guess<1 or 100<self.guess:
+                self.feedback_label.config(text="Please correct number(1-100).")
+                return
+            # If solution is lower than guess
+            elif self.solution<int(self.guess):
+                self.feedback_label.config(text="Less.")
+                for i in range (self.guess,100):
+                    self.numbers[i]=0
+                self.create_tiles()
+            # If guess is lower than solution
+            elif int(self.guess)<self.solution:
+                for i in range (0,self.guess):
+                    self.numbers[i]=0
+                self.create_tiles()
+            # If guessed
+            elif int(self.guess)==self.solution:
+                self.score=points_count(self.num_of_tr)
+            self.points=points_count(self.num_of_tr)
+            self.points_label.config(text=f"You can get {self.points} for correct answer.")
+            
+        # If not number entered
+        except ValueError:
+            pass
 
 #    def save_game():
 

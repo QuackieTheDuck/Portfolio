@@ -1,11 +1,9 @@
 # I think about modyfing how and when the list is saved
 # for example to give user ability to name file and load after
 # user demand without automatically loading at start
-# however for now I'm satisfied with this program so I've decides to
-# now to the next project
-
-
-# the project was made with assumption that user will not try to raise up any errors 
+# however for now I'm satisfied with this program so I've decided to
+# move to the next project
+# This program is written for windows since some os functions won't work on Linux or Mac
 
 import os
 import json

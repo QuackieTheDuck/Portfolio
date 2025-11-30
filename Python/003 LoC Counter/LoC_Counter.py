@@ -1,15 +1,12 @@
-# count LoC, exclude comments, save progress to file(CSV/JSON)
-# need to check what additions are in post course exercieses
-# concern displaying stats in HTML website
+# add saving to CSV
+# displaying data in HTML as a charts; LoC(time)
+# modifying how often the changes are checked
 
 import os
 import time
+from collections import defaultdict
 
-# create a library of languages(concern only known)
-# get Patah
-# get time
-# walk thorugh folders and files
-# save stats to a dir
+SLEEP_TIME=15 #seconds
 
 lang={
     "c":"C/C++",
@@ -51,17 +48,57 @@ lang={
     "cmd":"PowerShell",
 }
 
-loc={}
 def get_date():
-    print(time.strftime("%H:%M, %d.%m.%Y"))
-#get_date()
+    return time.strftime(" %d.%m.%Y, %H:%M ")
 
+def get_path():
+    return os.getcwd()
 
-def list_files():
-    path=os.getcwd()
+def get_flang(file):
+    ext=file.split('.')[-1]
+    return lang.get(ext)
+
+def get_lines(file, flang):
+    loc=0
+    with open(file, encoding="ibm437") as f:
+        data=f.read()
+    for line in data.splitlines():
+        if line.strip()=="":
+            continue
+        elif flang=="Python":
+            if line.strip()=="#":
+                continue
+            else:
+                loc+=1
+        elif flang=="C/C++":
+            if line.strip()=="//":
+                continue
+            else:
+                loc+=1
+        else:
+            loc+=1
+    return(loc)
+
+def loc_counter_prog():
+    path=get_path()
+    total_loc=0
+    stats=defaultdict(int)
     for root, dirs, files in os.walk(path):
         for i in range (0, len(files)):
-            if (a:=str(files[i].split('.')[-1])) in lang:
-                print(files[i], "<--", lang.get(a))
+           loc=0
+           flang=get_flang(files[i])
+           fpath=root+"\\"+files[i]
+           if flang:
+                loc=get_lines(fpath,flang)
+                total_loc+=loc
+                stats[flang]+=loc
+    print({
+        "date":get_date(),
+        "stats":dict(stats),
+        "total":total_loc
+        })
 
-list_files()
+while True:
+    loc_counter_prog()
+    print("Counting...")
+    time.sleep(SLEEP_TIME)

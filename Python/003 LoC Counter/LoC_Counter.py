@@ -4,49 +4,10 @@
 
 import os
 import time
+from languages import lang
 from collections import defaultdict
 
 SLEEP_TIME=15 #seconds
-
-lang={
-    "c":"C/C++",
-    "cpp":"C/C++",
-    "h":"C/C++",
-    "hpp":"C/C++",
-    "hxx":"C/C++",
-    "cc":"C/C++",
-    "cxx":"C/C++",
-    "py":"Python",
-    "pyz":"Python",
-    "pyc":"Python",
-    "pyo":"Python",
-    "rs":"Rust",
-    "js":"JavaScript",
-    "JS":"JavaScript",
-    "md":"Markdown",
-    "bat":"Batch",
-    "ino":"Arduino",
-    "pyw":"Python",
-    "pl":"Perl",
-    "php":"PHP",
-    "php3":"PHP",
-    "php4":"PHP",
-    "php5":"PHP",
-    "mk":"Makefile",
-    "s":"Assembly",
-    "as":"Assembly",
-    "asm":"Assembly",
-    "ps1":"PowerShell",
-    "rd":"Ruby",
-    "kt":"Kotlin",
-    "java":"Java",
-    "sh":"Shell/Bash",
-    "cs":"C#",
-    "html":"HTML",
-    "htm":"HTML",
-    "ts":"TypeScript",
-    "cmd":"PowerShell",
-}
 
 def get_date():
     return time.strftime(" %d.%m.%Y, %H:%M ")
